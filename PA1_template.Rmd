@@ -1,22 +1,63 @@
 ---
-title: "Reproducible Research: Peer Assessment 1"
-output: 
+title: 'Reproducible Research: Peer Assessment 1'
+output:
+  pdf_document: default
   html_document:
-    keep_md: true
+    keep_md: yes
 ---
 
 
 ## Loading and preprocessing the data
 
+Read in the data 
 
+The dataset table names are:
+- Steps: Number of steps taking in a 5-minute interval (missing values are coded as NA)
+- Date: The date on which the measurement was taken in YYYY-MM-DD format
+- Intervals:  Identifier for the 5-minute interval in which measurement was taken
+
+```{r}
+dat <-read.csv("activity.csv")
+```
 
 ## What is mean total number of steps taken per day?
 
+Make an aggregate dataset showing the number of steps taken per day:
+```{r,echo = True}
+## find the total steps per day 
+## aggregate data by date and add up the steps for each day
+aggbyDate <- aggregate(steps ~ date, dat, FUN = sum)
 
+```
+
+Make a histogram of the total number of steps taken each day
+```{r,echo = True}
+## make the histogram
+hist(aggbyDate$steps, main = "Total Number of Steps Taken Each Day", xlab = "Steps", ylab = "Frequency")
+```
+
+Calculate and report the mean and median of the total number of steps taken per day
+```{r,echo = True}
+## find mean and Median using the mean and median functions
+meanData <- mean(aggbyDate$steps) 
+medData <- median(aggbyDate$steps)
+```
+
+The mean of this dataset is 10766.19 Steps
+The median of this dataset is 10765 Steps
 
 ## What is the average daily activity pattern?
 
+Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
 
+```{r,echo = True}
+##similar to what was done above aggregate the steps by interval and average that for each day
+aggbyInterval <- aggregate(steps ~ interval, dat, FUN = mean)
+
+#make the time series plot of the Average Daily Acitivty Pattern
+plot(aggbyInterval$interval, aggbyInterval$steps, type = "l", xlab = "5-minute Interval", ylab = "Average Steps", main = "Average Daily Acitvity Pattern")
+
+```
 
 ## Imputing missing values
 
